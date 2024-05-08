@@ -1,0 +1,21 @@
+[x,fs]=audioread('C:\Program Files\MATLAB\MATLAB Production Server\R2015a\bin\work\data\1-11.wav');
+% plot waveform
+t=(0:length(x)-1)/Fs; % times of sampling instants
+subplot(2,1,1);
+plot(t,x);
+legend('Waveform');
+xlabel('Time (s)');
+ylabel('Amplitude');
+% get Linear prediction filter
+ncoeff = round(Fs/1000) + 2; % rule of thumb for formant estimation
+%lpc Linear Predictor Coefficients.
+%A = lpc(X,N) finds the coefficients, A=[ 1 A(2) ... A(N+1) ], of an Nth
+%order forward linear predictor.
+a=lpc(x,ncoeff);
+% plot frequency response
+[h,f]=freqz(1,a,512,Fs);
+subplot(2,1,2);
+plot(f,20*log10(abs(h)+eps));
+legend('LP Filter');
+xlabel('Frequency (Hz)');
+ylabel('Gain (dB)');
